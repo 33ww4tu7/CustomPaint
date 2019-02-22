@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+
+<GridPane alignment="center" hgap="10" prefWidth="522.0" vgap="10" xmlns="http://javafx.com/javafx/10.0.1"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <rowConstraints>
+        <RowConstraints/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0"/>
+    </rowConstraints>
+    <ButtonBar prefHeight="40.0" prefWidth="200.0">
+      <buttons>
+          <Button mnemonicParsing="false" text="Line"/>
+          <Button mnemonicParsing="false" text="Rect"/>
+          <Button mnemonicParsing="false" text="Circle"/>
+          <Button mnemonicParsing="false" text="Ellipse"/>
+          <Button mnemonicParsing="false" text="Soon"/>
+          <Button mnemonicParsing="false" text="Soon"/>
+      </buttons>
+    </ButtonBar>
+    <Canvas height="36.0" width="522.0" GridPane.rowIndex="1" fx:id="canvas"/>
+</GridPane>
