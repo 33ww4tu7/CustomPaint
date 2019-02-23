@@ -2,26 +2,25 @@
 
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
-
-<GridPane alignment="center" hgap="10" prefWidth="522.0" vgap="10" xmlns="http://javafx.com/javafx/10.0.1"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
-    <rowConstraints>
-        <RowConstraints/>
-        <RowConstraints minHeight="10.0" prefHeight="30.0"/>
-    </rowConstraints>
-    <ButtonBar prefHeight="40.0" prefWidth="200.0">
-      <buttons>
-          <Button mnemonicParsing="false" text="Line"/>
-          <Button mnemonicParsing="false" text="Rect"/>
-          <Button mnemonicParsing="false" text="Circle"/>
-          <Button mnemonicParsing="false" text="Ellipse"/>
-          <Button mnemonicParsing="false" text="Soon"/>
-          <Button mnemonicParsing="false" text="Soon"/>
-      </buttons>
-    </ButtonBar>
-    <Canvas height="36.0" width="522.0" GridPane.rowIndex="1" fx:id="canvas"/>
-</GridPane>
+<VBox maxHeight="800.0" maxWidth="1000.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <children>
+        <Pane prefHeight="77.0" prefWidth="600.0">
+            <children>
+                <Button layoutX="14.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickLine" text="Линия" />
+                <Button layoutX="73.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickRect" text="Прямоугольник" />
+                <Button layoutX="185.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickOval" text="Овал" />
+                <Button layoutX="236.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickTriangle" text="Треугольник" />
+                <Button layoutX="329.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickSquare" text="Квадрат" />
+                <Button layoutX="398.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickRoundRect" text="Скругленный квадрат" />
+            </children>
+        </Pane>
+        <Pane prefHeight="728.0" prefWidth="1000.0">
+            <children>
+                <Canvas fx:id="canvas" height="726.0" onMousePressed="#st" onMouseReleased="#end" width="1000.0" />
+            </children>
+        </Pane>
+    </children>
+</VBox>
