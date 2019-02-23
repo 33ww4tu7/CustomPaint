@@ -30,48 +30,38 @@ public class Controller {
 
     public void clickLine(ActionEvent actionEvent) {
         //   figure = figures.getFiguresList().get(figures.getFiguresList().indexOf(new Line()));
-        if (!figures.getFiguresList().contains(Line.class)) {
-            figure = new Line();
-            figures.getFiguresList().add(figure);
-        }
+        figure = new Line();
+        figures.getFiguresList().add(figure);
     }
 
     public void clickRect(ActionEvent actionEvent) {
         // figure = figures.getFiguresList().get(figures.getFiguresList().indexOf(new Rectangle()));
-        if (!figures.getFiguresList().contains(Rectangle.class)) {
-            figure = new Rectangle();
-            figures.getFiguresList().add(figure);
-        }
+        figure = new Rectangle();
+        figures.getFiguresList().add(figure);
     }
 
     public void clickOval(ActionEvent actionEvent) {
         // figure = figures.getFiguresList().get(figures.getFiguresList().indexOf(new Rectangle()));
-        if (!figures.getFiguresList().contains(Oval.class)) {
-            figure = new Oval();
-            figures.getFiguresList().add(figure);
-        }
+        figure = new Oval();
+        figures.getFiguresList().add(figure);
     }
 
     public void clickTriangle(ActionEvent actionEvent) {
         // figure = figures.getFiguresList().get(figures.getFiguresList().indexOf(new Rectangle()));
-        if (!figures.getFiguresList().contains(Triangle.class)) {
-            figure = new Triangle();
-            figures.getFiguresList().add(figure);
-        }
+        figure = new Triangle();
+        figures.getFiguresList().add(figure);
     }
 
     public void clickSquare(ActionEvent actionEvent) {
         // figure = figures.getFiguresList().get(figures.getFiguresList().indexOf(new Rectangle()));
-        if (!figures.getFiguresList().contains(Square.class)) {
-            figure = new Square();
-            figures.getFiguresList().add(figure);
-        }
+        figure = new Square();
+        figures.getFiguresList().add(figure);
     }
+
     public void clickRoundRect(ActionEvent actionEvent) {
         // figure = figures.getFiguresList().get(figures.getFiguresList().indexOf(new Rectangle()));
-        if (!figures.getFiguresList().contains(RoundRect.class)) {
-            figure = new RoundRect();
-            figures.getFiguresList().add(figure);
-        }
+
+        figure = new RoundRect();
+        figures.getFiguresList().add(figure);
     }
 }
