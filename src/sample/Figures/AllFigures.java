@@ -1,26 +1,25 @@
 package sample.Figures;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllFigures {
+public class AllFigures implements Serializable {
+
    private List<BaseFigure> figuresList = new ArrayList<>();
 
     public List<BaseFigure> getFiguresList() {
         return figuresList;
     }
 
+    public void Set (List<BaseFigure> a){
+        figuresList=a;
+    }
 
- /*   public BaseFigure getLine(){
-        return figuresList.get(0);
+    @Override
+    public String toString() {
+        return "AllFigures { " +
+                figuresList.toString() +
+                "}\n";
     }
-    public BaseFigure getCircle(){
-        return figuresList.get(1);
-    }
-    public BaseFigure getRectangle(){
-        return figuresList.get(2);
-    }
-    public BaseFigure getTriangle(){
-        return figuresList.get(3);
-    }*/
 }
