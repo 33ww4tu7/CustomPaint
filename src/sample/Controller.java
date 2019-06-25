@@ -1,31 +1,43 @@
 package sample;
 
+import customClassLoader.MyClassLoader;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
-import sample.Figures.*;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Controller {
     @FXML
     Canvas canvas;
+    @FXML
+    ComboBox<String> comboBox;
     private double x1;
     private double y1;
 
     private Logger log = Logger.getLogger(Controller.class.getName());
 
-    private String className = Line.class.getName();
+    private String packageName;
 
     private AllFigures figures = new AllFigures();
 
+    private String modulePath = "D:\\untitled1\\customFigures\\";
+
+    private BaseFigure baseFigure;
+
+    private Map<String, Class<?>> classList = new HashMap<>();
     public void st(MouseEvent mouseEvent) {
         x1 = mouseEvent.getSceneX();
         y1 = mouseEvent.getSceneY() - 77;
@@ -35,41 +47,49 @@ public class Controller {
         try {
             double x2 = mouseEvent.getSceneX();
             double y2 = mouseEvent.getSceneY() - 77;
-            Class c = Class.forName(className);
-            BaseFigure figure = (BaseFigure) c.newInstance();
+            BaseFigure figure = baseFigure;
             figure.setX1(x1);
             figure.setX2(x2);
             figure.setY1(y1);
             figure.setY2(y2);
             figure.Draw(canvas);
             figures.getFiguresList().add(figure);
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+        } catch (Exception e) {
             showAlert("Error occurred while drawing figures", e.toString());
         }
     }
 
-    public void clickLine(ActionEvent actionEvent) {
-        className = Line.class.getName();
-    }
+    @FXML
+    public void initialize() {
 
-    public void clickRect(ActionEvent actionEvent) {
-        className = Rectangle.class.getName();
-    }
+        MyClassLoader loader = new MyClassLoader(modulePath, "sample.Figures", ClassLoader.getSystemClassLoader());
 
-    public void clickOval(ActionEvent actionEvent) {
-        className = Oval.class.getName();
-    }
+        File dir = new File(modulePath);
+        String[] modules = dir.list();
 
-    public void clickTriangle(ActionEvent actionEvent) {
-        className = Triangle.class.getName();
-    }
-
-    public void clickSquare(ActionEvent actionEvent) {
-        className = Square.class.getName();
-    }
-
-    public void clickRoundRect(ActionEvent actionEvent) {
-        className = RoundRect.class.getName();
+        if (modules != null) {
+            for (String module : modules) {
+                try {
+                    Pattern pattern = Pattern.compile(".class");
+                    Matcher matcher = pattern.matcher(module);
+                    if (matcher.find(0)) {
+                        String moduleName = module.split(".class")[0];
+                        Class clazz = loader.loadClass(moduleName);
+                        classList.put(moduleName, clazz);
+                    }
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        classList.forEach((classKey, customClass) -> comboBox.getItems().add(classKey));
+        comboBox.setOnAction(event -> {
+            try {
+                baseFigure = (BaseFigure) classList.get(comboBox.getValue()).newInstance();
+            } catch (IllegalAccessException | InstantiationException e1) {
+                e1.printStackTrace();
+            }
+        });
     }
 
     public void clickSave(ActionEvent actionEvent) {
@@ -98,16 +118,19 @@ public class Controller {
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             int counter = objectInputStream.readInt();
             for (int i = 0; i<counter; i++) {
-                className = objectInputStream.readUTF();
-                Class c = Class.forName(className);
-                BaseFigure figure = (BaseFigure) c.newInstance();
-                figure.setX1(Double.parseDouble(objectInputStream.readUTF()));
-                figure.setX2(Double.parseDouble(objectInputStream.readUTF()));
-                figure.setY1(Double.parseDouble(objectInputStream.readUTF()));
-                figure.setY2(Double.parseDouble(objectInputStream.readUTF()));
-                objectInputStream.readChar();
-                figure.Draw(canvas);
-                figures.getFiguresList().add(figure);
+                packageName = objectInputStream.readUTF();
+                String[] className = packageName.split("\\.");
+                Class c = classList.get(className[className.length - 1]);
+                if (c != null) {
+                    BaseFigure figure = (BaseFigure) c.newInstance();
+                    figure.setX1(Double.parseDouble(objectInputStream.readUTF()));
+                    figure.setX2(Double.parseDouble(objectInputStream.readUTF()));
+                    figure.setY1(Double.parseDouble(objectInputStream.readUTF()));
+                    figure.setY2(Double.parseDouble(objectInputStream.readUTF()));
+                    objectInputStream.readChar();
+                    figure.Draw(canvas);
+                    figures.getFiguresList().add(figure);
+                }
             }
             objectInputStream.close();
         } catch (Exception e) {

@@ -1,4 +1,6 @@
-package sample.Figures;
+package sample;
+
+import sample.BaseFigure;
 
 import java.io.Serializable;
 import java.util.ArrayList;

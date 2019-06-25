@@ -2,22 +2,18 @@
 
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="800.0" maxWidth="1000.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<VBox maxHeight="800.0" maxWidth="1000.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <children>
         <Pane prefHeight="77.0" prefWidth="600.0">
             <children>
-                <Button layoutX="14.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickLine" text="Линия" />
-                <Button layoutX="73.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickRect" text="Прямоугольник" />
-                <Button layoutX="185.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickOval" text="Овал" />
-                <Button layoutX="236.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickTriangle" text="Треугольник" />
-                <Button layoutX="329.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickSquare" text="Квадрат" />
-                <Button layoutX="398.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickRoundRect" text="Скругленный квадрат" />
-                <Button layoutX="542.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickDownload" text="Загрузить" />
-                <Button layoutX="622.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickSave" text="Сохранить" />
-                <Button layoutX="706.0" layoutY="20.0" mnemonicParsing="false" onAction="#clickClear" text="Очистить" />
+                <Button layoutX="343.0" layoutY="19.0" mnemonicParsing="false" onAction="#clickDownload" text="Загрузить" />
+                <Button layoutX="426.0" layoutY="19.0" mnemonicParsing="false" onAction="#clickSave" text="Сохранить" />
+                <Button layoutX="516.0" layoutY="19.0" mnemonicParsing="false" onAction="#clickClear" text="Очистить" />
+            <ComboBox fx:id="comboBox" layoutX="26.0" layoutY="20.0" prefHeight="25.0" prefWidth="169.0" />
             </children>
         </Pane>
         <Pane prefHeight="728.0" prefWidth="1000.0">
