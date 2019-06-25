@@ -13,10 +13,10 @@ public class Square extends BaseFigure implements Serializable {
 
     @Override
     public void Draw(Canvas canvas) {
-        double x1 = this.x1;
-        double x2 = this.x2;
-        double y1 = this.y1;
-        double y2 = this.y2;
+        double x1 = getX1();
+        double x2 = getX2();
+        double y1 = getY1();
+        double y2 = getY2();
         double sizeX = (x1 < x2) ? (x2 - x1) : (x1 - x2);
         double sizeY = (y1 < y2) ? (y2 - y1) : (y1 - y2);
         double sizeMin = (sizeX < sizeY) ? sizeX : sizeY;
@@ -27,38 +27,6 @@ public class Square extends BaseFigure implements Serializable {
         return className;
     }
 
-    public double getY2() {
-        return y2;
-    }
-
-    public double getY1() {
-        return y1;
-    }
-
-    public double getX2() {
-        return x2;
-    }
-
-    public double getX1() {
-        return x1;
-    }
-
-    public void setX1(double x1) {
-        this.x1 = x1;
-    }
-
-    public void setY1(double y1) {
-        this.y1 = y1;
-    }
-
-    public void setY2(double y2) {
-        this.y2 = y2;
-    }
-
-    public void setX2(double x2) {
-        this.x2 = x2;
-    }
-
     @Override
     public String toString() {
         return "Square{" +
@@ -67,5 +35,10 @@ public class Square extends BaseFigure implements Serializable {
                 "y1=" + y1 +
                 "y2=" + y2 +
                 "}\n";
+    }
+
+    @Override
+    public BaseFigure factory() {
+        return new Square();
     }
 }

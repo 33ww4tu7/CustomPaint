@@ -1,8 +1,15 @@
 package sample;
 
+import com.google.gson.annotations.SerializedName;
 import javafx.scene.canvas.Canvas;
 
 public abstract class BaseFigure {
+
+    @SerializedName("type")
+    private String typeName;
+    public  BaseFigure(){
+        typeName=getClass().getName();
+    }
 
     private static final String className = BaseFigure.class.getName();
     private double x1, x2;
@@ -55,6 +62,8 @@ public abstract class BaseFigure {
                 ", y2=" + y2 +
                 "}\n";
     }
+
+    abstract  public BaseFigure factory();
 
 
 }

@@ -1,25 +1,27 @@
 package sample;
 
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 import customClassLoader.MyClassLoader;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import sample.Figures.PersonFigure;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Type;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Controller {
+    @FXML
+    MenuButton menuButton;
+
     @FXML
     Canvas canvas;
     @FXML
@@ -33,7 +35,7 @@ public class Controller {
 
     private AllFigures figures = new AllFigures();
 
-    private String modulePath = "D:\\untitled1\\customFigures\\";
+    private String modulePath = "customFigures\\";
 
     private BaseFigure baseFigure;
 
@@ -54,6 +56,7 @@ public class Controller {
             figure.setY2(y2);
             figure.Draw(canvas);
             figures.getFiguresList().add(figure);
+            baseFigure=baseFigure.factory();
         } catch (Exception e) {
             showAlert("Error occurred while drawing figures", e.toString());
         }
@@ -90,7 +93,112 @@ public class Controller {
                 e1.printStackTrace();
             }
         });
+
+
+
+
+
+
+
+        File catalog = new File("D:\\untitled1\\src\\figure");
+        File[] allfile =catalog.listFiles();
+        for (int i = 0; i <allfile.length ; i++) {
+            String Name = Integer.toString(i+1);
+            MenuItem item1 = new MenuItem("Figure"+Name);
+            item1.setOnAction(event -> {
+                GsonBuilder builder = new GsonBuilder();
+                builder.registerTypeAdapter(BaseFigure.class, new JsonDeserializerWithInheritance<BaseFigure>());
+                Gson gson = builder.setPrettyPrinting().create();
+
+                String json= null;
+                try {
+                    json = ReadInStr("D:\\untitled1\\src\\figure\\"+item1.getText()+".json");
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                Type itemsArrType = new TypeToken<BaseFigure[]>() {}.getType();
+                try {
+                    BaseFigure[] arrItemsDes = gson.fromJson(json, itemsArrType);
+                    baseFigure = new PersonFigure();
+                    for (int j = 0; j < arrItemsDes.length; j++) {
+                        ((PersonFigure) baseFigure).list.add(arrItemsDes[j]);
+                    }
+                } catch (Exception e){
+
+                }
+            });
+            menuButton.getItems().add(item1);
+        }
     }
+    public  void WriteInFile(String name,String content) {
+        try(FileWriter writer = new FileWriter(name, false))
+        {
+
+            writer.write(content);
+            writer.flush();
+        }
+        catch(IOException ex){
+
+            System.out.println(ex.getMessage());
+        }
+    }
+    public String ReadInStr(String name) throws FileNotFoundException {
+
+        String s = "";
+        Scanner in = new Scanner(new File(name));
+        while(in.hasNext())
+            s += in.nextLine() + "\r\n";
+        in.close();
+        return s;
+    }
+    public int CountPersonFigure()
+    {
+        int result=0;
+        File catalog = new File("D:\\untitled1\\src\\figure");
+        File[] allfile =catalog.listFiles();
+        result=allfile.length;
+        return result;
+    }
+
+    public void setPersonFigure(ActionEvent actionEvent) {
+        baseFigure = new PersonFigure();
+        for (BaseFigure figure:
+                figures.getFiguresList()) {
+            ((PersonFigure) baseFigure).list.add(figure);
+        }
+        Class a = baseFigure.getClass();
+        String Name = Integer.toString(CountPersonFigure()+1);
+        MenuItem item1 = new MenuItem("Figure"+Name);
+        item1.setOnAction(event -> {
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(BaseFigure.class, new JsonDeserializerWithInheritance<BaseFigure>());
+            Gson gson = builder.setPrettyPrinting().create();
+            String json= null;
+            try {
+                json = ReadInStr("D:\\untitled1\\src\\figure\\Figure"+Name+".json");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            Type itemsArrType = new TypeToken<BaseFigure[]>() {}.getType();
+            try {
+                BaseFigure[] arrItemsDes = gson.fromJson(json, itemsArrType);
+                baseFigure = new PersonFigure();
+                for (int i = 0; i < arrItemsDes.length; i++) {
+                    ((PersonFigure) baseFigure).list.add(arrItemsDes[i]);
+                }
+            } catch (Exception e){
+
+            }
+        });
+        menuButton.getItems().add(item1);
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(BaseFigure.class, new JsonDeserializerWithInheritance<BaseFigure>());
+        Gson gson = builder.setPrettyPrinting().create();
+        String derivedClass1Json = gson.toJson(((PersonFigure) baseFigure).list.toArray());
+        WriteInFile("D:\\untitled1\\src\\figure\\Figure"+Name+".json",derivedClass1Json);
+    }
+
+
 
     public void clickSave(ActionEvent actionEvent) {
         try {
@@ -149,5 +257,24 @@ public class Controller {
         alert.setHeaderText(headerMessage);
         alert.setContentText(errorMessage);
         alert.showAndWait();
+    }
+}
+class JsonDeserializerWithInheritance<Figure> implements JsonDeserializer<Figure> {
+
+    @Override
+    public Figure deserialize(
+            JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
+        JsonObject jsonObject = json.getAsJsonObject();
+        JsonPrimitive classNamePrimitive = (JsonPrimitive) jsonObject.get("type");
+        String className = classNamePrimitive.getAsString();
+
+        Class<?> clazz;
+        try {
+            clazz = Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            throw new JsonParseException(e.getMessage());
+        }
+        return context.deserialize(jsonObject, clazz);
     }
 }
